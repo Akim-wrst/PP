@@ -1,0 +1,8 @@
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 6
+        thread-name-prefix: TaskScheduler-
+        await-termination-seconds: 1800
+        wait-for-tasks-to-complete-on-shutdown: true
