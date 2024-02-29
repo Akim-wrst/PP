@@ -12,8 +12,6 @@ import java.time.LocalDate;
 @Schema(description = "Client entity")
 public class Client {
     @Id
-    //@GeneratedValue(generator = "uuid")
-    //@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
     @Schema(description = "Client ID")
     private String clientId;
     @Schema(description = "Client name")
@@ -22,12 +20,10 @@ public class Client {
     private String middleName;
     @Schema(description = "Client surname")
     private String surname;
-    //@Formula("DATE_PART('year', AGE(birthday))")
     @Schema(description = "Client age in years")
     private Long age;
     @Schema(description = "Client birthday")
     private LocalDate birthday;
     @Schema(description = "Client phone number")
     private String phone;
-
 }

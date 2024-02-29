@@ -4,7 +4,6 @@ import com.example.pp.model.Client;
 import com.example.pp.service.ClientServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +17,8 @@ public class ClientController {
 
     @GetMapping("getClient/{id}")
     @ApiOperation("Получить клиента по ID")
-    public ResponseEntity<Client> getClientId(@PathVariable String id) {
-        return service.getClient(id);
+    public void getClientId(@PathVariable String id) {
+        service.getClient(id);
     }
 
     @GetMapping("getClient")

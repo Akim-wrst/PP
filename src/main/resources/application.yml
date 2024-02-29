@@ -1,3 +1,12 @@
+clients:
+  url: localhost:8081
+
+server:
+  port: 8080
+
+myapp:
+  discount: "10%"
+  cron: "0 0 * * * *"
 
 spring:
   datasource:
@@ -17,7 +26,5 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog/master.sql
 
-clients:
-  url: localhost:8081
-server:
-  port: 8080
+
+

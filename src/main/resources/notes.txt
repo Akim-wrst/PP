@@ -1,1 +1,87 @@
+http://localhost:8080/swagger-ui/index.html
 
+version: '3'
+services:
+  db:
+    restart: always
+    image: "postgres:16.2"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: bigi1817
+      POSTGRES_DB: test_db
+      PORT: 5432
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+
+
+version: '3'
+services:
+  db:
+    restart: always
+    image: "postgres:16.2"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: bigi1817
+      POSTGRES_DB: test_db
+      PORT: 5432
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  kafka:
+    image: confluentinc/cp-kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - 9091:8080
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=test
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+    links:
+      - kafka
+      - zookeeper
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
