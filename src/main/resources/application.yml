@@ -1,12 +1,19 @@
-clients:
-  url: localhost:8081
-
 server:
   port: 8080
+
+clients:
+  url: localhost:8081
 
 myapp:
   discount: "10%"
   cron: "0 0 * * * *"
+  topic_name: "messageSMS"
+  host: "localhost:9092"
+  partitions: 1
+  replicas: 1
+  hour: 19
+  minute: 0
+  lastDigitOfNumber: "7"
 
 spring:
   datasource:
@@ -14,6 +21,7 @@ spring:
     username: postgres
     password: bigi1817
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: none
     database: postgresql
@@ -24,7 +32,7 @@ spring:
         format_sql: true
   liquibase:
     enabled: true
-    change-log: classpath:/db/changelog/master.sql
+    change-log: classpath:db/changelog/master.yml
 
 
 

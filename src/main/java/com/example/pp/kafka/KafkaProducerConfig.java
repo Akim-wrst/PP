@@ -1,6 +1,7 @@
 package com.example.pp.kafka;
 
-import lombok.Getter;
+import com.example.pp.config.AppConfig;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -15,21 +16,21 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
 @Configuration
+@RequiredArgsConstructor
 public class KafkaProducerConfig {
 
-    public static String TOPIC_NAME = "messageSMS";
+    private final AppConfig appConfig;
 
     @Bean
     public NewTopic exampleTopic() {
-        return TopicBuilder.name(TOPIC_NAME).partitions(1).replicas(1).build();
+        return TopicBuilder.name(appConfig.getTopic_name()).partitions(appConfig.getPartitions()).replicas(appConfig.getReplicas()).build();
     }
 
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, appConfig.getHost());
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProps);
