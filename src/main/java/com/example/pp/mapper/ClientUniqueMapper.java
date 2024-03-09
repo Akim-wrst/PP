@@ -1,7 +1,7 @@
 package com.example.pp.mapper;
 
+import com.example.pp.clientDTO.ClientUnique;
 import com.example.pp.model.Client;
-import com.example.pp.model.ClientUnique;
 import com.example.pp.model.Message;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
