@@ -1,2 +1,38 @@
 server:
   port: 8080
+
+clients:
+  url: localhost:8081
+
+myapp:
+  discount: "10%"
+  cron: "0 0 * * * *"
+  topic_name: "messageSMS"
+  host: "localhost:9092"
+  partitions: 1
+  replicas: 1
+  hour: 19
+  minute: 0
+  lastDigitOfNumber: "7"
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test_db
+    username: postgres
+    password: bigi1817
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/master.yml
+
+
+

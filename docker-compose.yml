@@ -1,0 +1,33 @@
+version: '3'
+services:
+  db:
+    restart: always
+    image: "postgres:16.2"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: bigi1817
+      POSTGRES_DB: test_db
+      PORT: 5432
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
