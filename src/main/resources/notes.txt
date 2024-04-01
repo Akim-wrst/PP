@@ -1,0 +1,45 @@
+http://localhost:8080/swagger-ui/index.html
+
+@Scheduled(fixedRate = 5000)
+    public void kafkaMapperTest() {
+        Client client = new Client();
+        client.setClientId("1");
+        client.setName("Akim");
+        client.setMiddleName("Alexandrovich");
+        client.setSurname("Parish");
+        client.setAge(30L);
+        client.setBirthday(LocalDate.of(1998, 10, 16));
+        client.setPhone("89586719625");
+        System.out.println(clientUniqueMapper.toUniqueClient(client));
+    }
+
+    @Scheduled(fixedRate = 5000)
+    public void kafkaMapperTest() {
+        try {
+            Client client = new Client();
+            client.setClientId("1");
+            client.setName("Akim");
+            client.setMiddleName("Alexandrovich");
+            client.setSurname("Parish");
+            client.setAge(30L);
+            client.setBirthday(LocalDate.of(1998, 10, 16));
+            client.setPhone("89586719625");
+
+            kafkaTemplate.send(appConfig.getTopic_name(), clientUniqueMapper.clientToMessage(clientUniqueMapper.toUniqueClient(client), appConfig.getDiscount()));
+            System.out.println(clientUniqueMapper.clientToMessage(clientUniqueMapper.toUniqueClient(client), appConfig.getDiscount()));
+            System.out.println(appConfig.getCron());
+        } catch (Exception e) {
+            log.error("Error occurred in kafkaTest method!: {}", e.getMessage());
+        }
+    }
+
+    @Scheduled(fixedRate = 5000)
+    public void kafkaMapperTest() {
+        ClientUnique clientUnique = new ClientUnique();
+        clientUnique.setFullName("asds sdsd sdsd");
+        clientUnique.setPhone("98796652323423");
+        clientUnique.setBirthday(LocalDate.of(1998,2,11));
+        clientUnique.setMessageSend(true);
+        clientUniqueRepository.save(clientUnique);
+    }
+
