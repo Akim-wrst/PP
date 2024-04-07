@@ -40,7 +40,7 @@ public class ClientServiceImpl implements ClientService {
                             log.info("Message sent for clients: {}", client.getPhone());
                         });
             } else {
-                log.info("Current time is past, " + appConfig.getHour() + ":" + appConfig.getMinute() + " no messages will be sent.");
+                log.info("Current time is past, {}:{} no messages will be sent.", appConfig.getHour(), appConfig.getMinute());
             }
 
             clientUniqueRepository.saveAll(clientFeignClient.getAllClients()

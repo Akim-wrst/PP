@@ -63,8 +63,8 @@ public class ClientServiceImplTest {
         clientService.sendUniqueClientMessagesBasedOnTime();
 
         verify(appConfig, times(1)).getHour();
-        verify(clientUniqueRepository,times(1)).findAllClientsWhereMessageSendIsFalse();
-        verify(clientUniqueMapper,times(1)).clientToMessage(clientUnique,appConfig.getDiscount());
+        verify(clientUniqueRepository, times(1)).findAllClientsWhereMessageSendIsFalse();
+        verify(clientUniqueMapper, times(1)).clientToMessage(clientUnique, appConfig.getDiscount());
         verify(kafkaTemplate, times(1)).send(eq(appConfig.getTopic_name()), eq(expectedMessage));
         verify(clientUniqueRepository, times(1)).save(clientUnique);
     }
@@ -91,10 +91,10 @@ public class ClientServiceImplTest {
         clientService.processClientAndSendUniqueMessageIfApplicable(clientId);
 
         verify(appConfig, times(1)).getHour();
-        verify(appConfig,times(1)).getLastDigitOfNumber();
-        verify(clientFeignClient,times(1)).getClient(clientId);
-        verify(clientUniqueMapper,times(1)).toUniqueClient(client);
-        verify(clientUniqueMapper,times(1)).clientToMessage(clientUnique,appConfig.getDiscount());
+        verify(appConfig, times(1)).getLastDigitOfNumber();
+        verify(clientFeignClient, times(1)).getClient(clientId);
+        verify(clientUniqueMapper, times(1)).toUniqueClient(client);
+        verify(clientUniqueMapper, times(1)).clientToMessage(clientUnique, appConfig.getDiscount());
         verify(kafkaTemplate, times(1)).send(eq(appConfig.getTopic_name()), eq(expectedMessage));
         verify(clientUniqueRepository, times(1)).save(clientUnique);
     }
