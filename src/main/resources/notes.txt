@@ -42,4 +42,8 @@ http://localhost:8080/swagger-ui/index.html
         clientUnique.setMessageSend(true);
         clientUniqueRepository.save(clientUnique);
     }
-
+<dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.2.0</version>
+        </dependency>
