@@ -43,7 +43,11 @@ http://localhost:8080/swagger-ui/index.html
         clientUniqueRepository.save(clientUnique);
     }
 <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>3.2.0</version>
-        </dependency>
+   <groupId>org.modelmapper</groupId>
+   <artifactId>modelmapper</artifactId>
+   <version>3.2.0</version>
+</dependency>
+
+databaseChangeLog:
+  - include:
+      file: db/changelog/create-table1.sql

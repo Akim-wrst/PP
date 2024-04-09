@@ -32,7 +32,7 @@ spring:
         format_sql: true
   liquibase:
     enabled: true
-    change-log: classpath:db/changelog/master.yml
+    change-log: classpath:db/changelog/master.xml
 
 
 
