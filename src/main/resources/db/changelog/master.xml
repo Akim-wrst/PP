@@ -4,7 +4,9 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
     <changeSet context="development" author="Akim" id="1-user">
         <sqlFile dbms="postgresql" path="create-table1.sql" relativeToChangelogFile="true" />
     </changeSet>
+
 </databaseChangeLog>
