@@ -4,12 +4,10 @@ package com.example.pp.service;
 import com.example.pp.config.AppConfig;
 import com.example.pp.httpclient.ClientFeignClient;
 import com.example.pp.mapper.ClientUniqueMapper;
-import com.example.pp.model.Client;
 import com.example.pp.repository.ClientUniqueRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
