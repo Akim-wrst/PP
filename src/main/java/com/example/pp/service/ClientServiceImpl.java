@@ -4,6 +4,7 @@ package com.example.pp.service;
 import com.example.pp.config.AppConfig;
 import com.example.pp.httpclient.ClientFeignClient;
 import com.example.pp.mapper.ClientUniqueMapper;
+import com.example.pp.model.Message;
 import com.example.pp.repository.ClientUniqueRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class ClientServiceImpl implements ClientService {
     private final ClientUniqueRepository clientUniqueRepository;
     private final ClientUniqueMapper clientUniqueMapper;
     private final ClientFeignClient clientFeignClient;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, Message> kafkaTemplate;
     private final AppConfig appConfig;
     private final Month currentMonth = ZonedDateTime.now(ZoneId.of("Europe/Moscow")).getMonth();
     private final LocalTime currentTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow")).toLocalTime();
