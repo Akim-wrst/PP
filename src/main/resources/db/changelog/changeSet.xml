@@ -5,6 +5,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <include file="db/changelog/changeSet.xml" />
+    <changeSet context="development" author="Akim" id="1-user">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="сlients" />
+            </not>
+        </preConditions>
+        <sqlFile dbms="postgresql" path="create-table1.sql" relativeToChangelogFile="true" />
+    </changeSet>
 
 </databaseChangeLog>
