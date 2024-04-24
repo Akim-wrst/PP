@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class SchedulerTask {
     private final ClientServiceImpl clientService;
 
-    @Scheduled(cron = "${myapp.cron}")
+    @Scheduled(cron = "${clients.cron}")
     public void scheduleTaskWithCronExpression() {
         clientService.sendUniqueClientMessagesBasedOnTime();
     }
