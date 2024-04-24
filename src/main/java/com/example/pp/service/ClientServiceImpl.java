@@ -25,6 +25,7 @@ public class ClientServiceImpl implements ClientService {
     private final ClientFeignClient clientFeignClient;
     private final KafkaTemplate<String, Message> kafkaTemplate;
     private final AppConfig appConfig;
+
     private final Month currentMonth = ZonedDateTime.now(ZoneId.of("Europe/Moscow")).getMonth();
     private final LocalTime currentTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow")).toLocalTime();
 
