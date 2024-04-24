@@ -17,9 +17,9 @@ myapp:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/test_db
-    username: postgres
-    password: bigi1817
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/test_db
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:bigi1817}
   jpa:
     open-in-view: false
     hibernate:
@@ -33,6 +33,5 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:db/master.xml
-
 
 
