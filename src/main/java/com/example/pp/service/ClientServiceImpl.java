@@ -1,13 +1,13 @@
 package com.example.pp.service;
 
-
-import com.example.pp.config.AppConfig;
 import com.example.pp.httpclient.ClientFeignClient;
 import com.example.pp.mapper.ClientUniqueMapper;
 import com.example.pp.model.Message;
 import com.example.pp.repository.ClientUniqueRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,37 +18,49 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Getter
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
     private final ClientUniqueRepository clientUniqueRepository;
     private final ClientUniqueMapper clientUniqueMapper;
     private final ClientFeignClient clientFeignClient;
     private final KafkaTemplate<String, Message> kafkaTemplate;
-    private final AppConfig appConfig;
 
     private final Month currentMonth = ZonedDateTime.now(ZoneId.of("Europe/Moscow")).getMonth();
     private final LocalTime currentTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow")).toLocalTime();
+
+    @Value("${clients.discount}")
+    private String discount;
+
+    @Value("${clients.topic_name}")
+    private String topic_name;
+
+    @Value("${clients.lastDigitOfNumber}")
+    private String lastDigitOfNumber;
+
+    @Value("${clients.time}")
+    private LocalTime time;
 
     @Transactional
     @Override
     public void sendUniqueClientMessagesBasedOnTime() {
         try {
-            if (!currentTime.isAfter(LocalTime.of(appConfig.getHour(), appConfig.getMinute()))) {
+            if (!currentTime.isAfter(getTime())) {
                 clientUniqueRepository.findAllClientsWhereMessageSendIsFalse()
                         .forEach(client -> {
-                            kafkaTemplate.send(appConfig.getTopic_name(), clientUniqueMapper.clientToMessage(client, appConfig.getDiscount()));
+                            kafkaTemplate.send(getTopic_name(), clientUniqueMapper.clientToMessage(client, getDiscount()));
                             client.setMessageSend(true);
                             clientUniqueRepository.save(client);
                             log.info("Message sent for clients: {}", client.getPhone());
                         });
             } else {
-                log.info("Current time is past, {}:{} no messages will be sent.", appConfig.getHour(), appConfig.getMinute());
+                log.info("Current time is past, {} no messages will be sent.", getTime());
             }
 
             clientUniqueRepository.saveAll(clientFeignClient.getAllClients()
                     .stream()
                     .filter(Objects::nonNull)
-                    .filter(client -> client.getPhone().endsWith(appConfig.getLastDigitOfNumber())
+                    .filter(client -> client.getPhone().endsWith(getLastDigitOfNumber())
                             && client.getBirthday().getMonth() == currentMonth)
                     .map(clientUniqueMapper::toUniqueClient)
                     .collect(Collectors.toList()));
@@ -62,13 +74,13 @@ public class ClientServiceImpl implements ClientService {
     public void processClientAndSendUniqueMessageIfApplicable(String id) {
         try {
             Optional.ofNullable(clientFeignClient.getClient(id))
-                    .filter(client -> !clientUniqueRepository.existsById(client.getPhone()))
-                    .filter(client -> client.getPhone().endsWith(appConfig.getLastDigitOfNumber())
+                    //.filter(client -> !clientUniqueRepository.existsById(client.getPhone()))
+                    .filter(client -> client.getPhone().endsWith(getLastDigitOfNumber())
                             && client.getBirthday().getMonth() == currentMonth)
                     .map(clientUniqueMapper::toUniqueClient)
                     .ifPresent(clientUnique -> {
-                        if (!currentTime.isAfter(LocalTime.of(appConfig.getHour(), appConfig.getMinute()))) {
-                            kafkaTemplate.send(appConfig.getTopic_name(), clientUniqueMapper.clientToMessage(clientUnique, appConfig.getDiscount()));
+                        if (!currentTime.isAfter(getTime())) {
+                            kafkaTemplate.send(getTopic_name(), clientUniqueMapper.clientToMessage(clientUnique, getDiscount()));
                             clientUnique.setMessageSend(true);
                             log.info("Message sent for client: {}", clientUnique.getPhone());
                         }

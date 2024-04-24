@@ -3,17 +3,14 @@ server:
 
 clients:
   url: localhost:8081
-
-myapp:
   discount: "10%"
   cron: "0 0 * * * *"
   topic_name: "messageSMS"
   host: "localhost:9092"
   partitions: 1
   replicas: 1
-  hour: 19
-  minute: 0
   lastDigitOfNumber: "7"
+  time: "19:00"
 
 spring:
   datasource:
