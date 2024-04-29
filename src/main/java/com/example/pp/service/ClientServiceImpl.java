@@ -1,7 +1,9 @@
 package com.example.pp.service;
 
+import com.example.pp.clientDTO.ClientUnique;
 import com.example.pp.httpclient.ClientFeignClient;
 import com.example.pp.mapper.ClientUniqueMapper;
+import com.example.pp.model.Client;
 import com.example.pp.model.Message;
 import com.example.pp.repository.ClientUniqueRepository;
 import lombok.Getter;
@@ -14,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -49,21 +50,25 @@ public class ClientServiceImpl implements ClientService {
                 clientUniqueRepository.findAllClientsWhereMessageSendIsFalse()
                         .forEach(client -> {
                             kafkaTemplate.send(getTopic_name(), clientUniqueMapper.clientToMessage(client, getDiscount()));
-                            client.setMessageSend(true);
-                            clientUniqueRepository.save(client);
+                            clientUniqueRepository.updateClientMessageSendTrue(client.getPhone());
                             log.info("Message sent for clients: {}", client.getPhone());
                         });
             } else {
                 log.info("Current time is past, {} no messages will be sent.", getTime());
             }
 
-            clientUniqueRepository.saveAll(clientFeignClient.getAllClients()
+            List<Client> newClients = clientFeignClient.getAllClients()
                     .stream()
                     .filter(Objects::nonNull)
                     .filter(client -> client.getPhone().endsWith(getLastDigitOfNumber())
                             && client.getBirthday().getMonth() == currentMonth)
-                    .map(clientUniqueMapper::toUniqueClient)
-                    .collect(Collectors.toList()));
+                    .toList();
+
+            for (Client newClient : newClients) {
+                if (clientUniqueRepository.findByPhone(newClient.getPhone()) == null) {
+                    clientUniqueRepository.save(clientUniqueMapper.toUniqueClient(newClient));
+                }
+            }
         } catch (Exception e) {
             log.error("Error occurred in getClientUniqueInfo method: {}", e.getMessage());
         }
@@ -83,7 +88,9 @@ public class ClientServiceImpl implements ClientService {
                             clientUnique.setMessageSend(true);
                             log.info("Message sent for client: {}", clientUnique.getPhone());
                         }
-                        clientUniqueRepository.save(clientUnique);
+                        if (clientUniqueRepository.findByPhone(clientUnique.getPhone()) == null) {
+                            clientUniqueRepository.save(clientUnique);
+                        }
                         log.info("The client is saved: {}", clientUnique.getPhone());
                     });
         } catch (Exception e) {
