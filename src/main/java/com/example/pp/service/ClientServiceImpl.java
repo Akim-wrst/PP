@@ -82,7 +82,7 @@ public class ClientServiceImpl implements ClientService {
                             clientUnique.setMessageSend(true);
                             log.info("Message sent for client: {}", clientUnique.getPhone());
                         }
-                        if (clientUniqueRepository.getById(clientUnique.getPhone()).getPhone() == null) {
+                        if (clientUniqueRepository.findPhoneByPhone(clientUnique.getPhone()) == null) {
                             clientUniqueRepository.save(clientUnique);
                         }
                         log.info("The client is saved: {}", clientUnique.getPhone());
