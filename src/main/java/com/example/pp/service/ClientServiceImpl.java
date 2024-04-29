@@ -74,7 +74,6 @@ public class ClientServiceImpl implements ClientService {
     public void processClientAndSendUniqueMessageIfApplicable(String id) {
         try {
             Optional.ofNullable(clientFeignClient.getClient(id))
-                    //.filter(client -> !clientUniqueRepository.existsById(client.getPhone()))
                     .filter(client -> client.getPhone().endsWith(getLastDigitOfNumber())
                             && client.getBirthday().getMonth() == currentMonth)
                     .map(clientUniqueMapper::toUniqueClient)

@@ -61,24 +61,15 @@ public class ClientServiceImplTest {
         verify(clientUniqueRepository, times(2)).save(any());
     }
 
-    /*@Test
+    @Test
     public void testProcessClientAndSendUniqueMessageIfApplicable() {
-        ReflectionTestUtils.setField(clientService, "time", LocalTime.now());
+        Client client = new Client("1", "Иван", "Иванов", "Иванович", 26L, LocalDate.now(), "89111234567");
 
-        Client client = new Client("1", "Иван", "Иванов", "Иванович", 26L, LocalDate.now(), "89111234563");
         when(clientFeignClient.getClient("1")).thenReturn(client);
-
-        ClientUnique model = new ClientUnique("Иванов Иван Иванович", "89111234562", LocalDate.now(), false);
-        when(clientUniqueRepository.getById("89111234567")).thenReturn(model);
-
-        Message smsMessage = new Message("89111234567", "Текст сообщения для Иван Иванов");
-        when(clientUniqueMapper.clientToMessage(any(), any())).thenReturn(smsMessage);
 
         clientService.processClientAndSendUniqueMessageIfApplicable("1");
 
-        verify(clientFeignClient, times(1)).getClient(any());
-        verify(kafkaTemplate, times(1)).send(any(), any());
-        verify(clientUniqueRepository, times(1)).save(any());
-    }*/
+        verify(clientFeignClient, times(1)).getClient("1");
+    }
 }
 
