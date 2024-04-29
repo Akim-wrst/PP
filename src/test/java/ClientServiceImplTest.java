@@ -6,7 +6,6 @@ import com.example.pp.model.Message;
 import com.example.pp.repository.ClientUniqueRepository;
 import com.example.pp.service.ClientServiceImpl;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;

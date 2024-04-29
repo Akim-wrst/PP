@@ -1,6 +1,5 @@
 package com.example.pp.service;
 
-import com.example.pp.clientDTO.ClientUnique;
 import com.example.pp.httpclient.ClientFeignClient;
 import com.example.pp.mapper.ClientUniqueMapper;
 import com.example.pp.model.Client;
