@@ -15,6 +15,7 @@ public interface ClientUniqueRepository extends JpaRepository<ClientUnique, Stri
 
     @Query("SELECT c FROM ClientUnique c WHERE c.phone = :phone")
     Client findByPhone(String phone);
+
     @Query("SELECT c FROM ClientUnique c WHERE c.messageSend = false")
     List<ClientUnique> findAllClientsWhereMessageSendIsFalse();
 
