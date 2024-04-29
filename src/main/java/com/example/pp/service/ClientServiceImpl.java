@@ -2,7 +2,6 @@ package com.example.pp.service;
 
 import com.example.pp.httpclient.ClientFeignClient;
 import com.example.pp.mapper.ClientUniqueMapper;
-import com.example.pp.model.Client;
 import com.example.pp.model.Message;
 import com.example.pp.repository.ClientUniqueRepository;
 import lombok.Getter;
@@ -56,18 +55,14 @@ public class ClientServiceImpl implements ClientService {
                 log.info("Current time is past, {} no messages will be sent.", getTime());
             }
 
-            List<Client> newClients = clientFeignClient.getAllClients()
+            clientFeignClient.getAllClients()
                     .stream()
                     .filter(Objects::nonNull)
                     .filter(client -> client.getPhone().endsWith(getLastDigitOfNumber())
                             && client.getBirthday().getMonth() == currentMonth)
-                    .toList();
+                    .filter(client -> clientUniqueRepository.getById(client.getPhone()).getPhone() == null)
+                    .forEach(client -> clientUniqueRepository.save(clientUniqueMapper.toUniqueClient(client)));
 
-            for (Client newClient : newClients) {
-                if (clientUniqueRepository.getById(newClient.getPhone()).getPhone() == null) {
-                    clientUniqueRepository.save(clientUniqueMapper.toUniqueClient(newClient));
-                }
-            }
         } catch (Exception e) {
             log.error("Error occurred in getClientUniqueInfo method: {}", e.getMessage());
         }
