@@ -46,18 +46,20 @@ public class ClientServiceImplTest {
         ReflectionTestUtils.setField(clientService, "lastDigitOfNumber", "1");
         ReflectionTestUtils.setField(clientService, "time", LocalTime.now());
 
-        Client client1 = new Client("1", "Иван", "Иванов", "Иванович", 26L, LocalDate.now(), "89111234561");
-        Client client2 = new Client("2", "Петр", "Петров", "Петрович", 24L, LocalDate.now(), "89117654321");
-        when(clientFeignClient.getAllClients()).thenReturn(Arrays.asList(client1, client2));
+        when(clientFeignClient.getAllClients()).thenReturn(Arrays.asList(
+                new Client("1", "Иван", "Иванов", "Иванович", 26L, LocalDate.now(), "89111234561"),
+                new Client("2", "Петр", "Петров", "Петрович", 24L, LocalDate.now(), "89117654321")
+        ));
 
-        ClientUnique model1 = new ClientUnique("Иванов Иван Иванович", "89111234563", LocalDate.now(), false);
-        ClientUnique model2 = new ClientUnique("Петров Петр Петрович", "89117654322", LocalDate.now(), false);
+        when(clientUniqueRepository.findAllClientsWhereMessageSendIsFalse()).thenReturn(Arrays.asList(
+                new ClientUnique("Иванов Иван Иванович", "89111234563", LocalDate.now(), false),
+                new ClientUnique("Петров Петр Петрович", "89117654322", LocalDate.now(), false)
+        ));
 
-        when(clientUniqueRepository.findAllClientsWhereMessageSendIsFalse()).thenReturn(Arrays.asList(model1, model2));
         when(clientUniqueRepository.findPhoneByPhone(anyString())).thenReturn(null);
 
-        Message smsMessage1 = new Message("89111234567", "Текст сообщения для Иван Иванов");
-        when(clientUniqueMapper.clientToMessage(any(), any())).thenReturn(smsMessage1);
+        when(clientUniqueMapper.clientToMessage(any(), any())).thenReturn(
+                new Message("89111234567", "Текст сообщения для Иван Иванов"));
 
         clientService.sendUniqueClientMessagesBasedOnTime();
 
