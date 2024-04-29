@@ -10,7 +10,7 @@ clients:
   partitions: 1
   replicas: 1
   lastDigitOfNumber: "7"
-  time: "19:00"
+  time: "23:00"
 
 spring:
   datasource:

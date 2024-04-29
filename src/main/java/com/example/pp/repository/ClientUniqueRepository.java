@@ -11,6 +11,8 @@ import java.util.List;
 
 @Repository
 public interface ClientUniqueRepository extends JpaRepository<ClientUnique, String> {
+    @Query("SELECT c.phone FROM ClientUnique c WHERE c.phone = :phone")
+    String findPhoneByPhone(@Param("phone") String phone);
 
     @Query("SELECT c FROM ClientUnique c WHERE c.messageSend = false")
     List<ClientUnique> findAllClientsWhereMessageSendIsFalse();
