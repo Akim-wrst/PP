@@ -60,7 +60,7 @@ public class ClientServiceImpl implements ClientService {
                     .filter(Objects::nonNull)
                     .filter(client -> client.getPhone().endsWith(getLastDigitOfNumber())
                             && client.getBirthday().getMonth() == currentMonth)
-                    .filter(client -> clientUniqueRepository.getById(client.getPhone()).getPhone() == null)
+                    .filter(client -> clientUniqueRepository.findPhoneByPhone(client.getPhone()) == null)
                     .forEach(client -> clientUniqueRepository.save(clientUniqueMapper.toUniqueClient(client)));
 
         } catch (Exception e) {
