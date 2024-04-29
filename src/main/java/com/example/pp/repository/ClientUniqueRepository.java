@@ -1,7 +1,6 @@
 package com.example.pp.repository;
 
 import com.example.pp.clientDTO.ClientUnique;
-import com.example.pp.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,9 +11,6 @@ import java.util.List;
 
 @Repository
 public interface ClientUniqueRepository extends JpaRepository<ClientUnique, String> {
-
-    @Query("SELECT c FROM ClientUnique c WHERE c.phone = :phone")
-    Client findByPhone(String phone);
 
     @Query("SELECT c FROM ClientUnique c WHERE c.messageSend = false")
     List<ClientUnique> findAllClientsWhereMessageSendIsFalse();

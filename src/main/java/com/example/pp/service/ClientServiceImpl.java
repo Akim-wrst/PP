@@ -64,7 +64,7 @@ public class ClientServiceImpl implements ClientService {
                     .toList();
 
             for (Client newClient : newClients) {
-                if (clientUniqueRepository.findByPhone(newClient.getPhone()) == null) {
+                if (clientUniqueRepository.getById(newClient.getPhone()).getPhone() == null) {
                     clientUniqueRepository.save(clientUniqueMapper.toUniqueClient(newClient));
                 }
             }
@@ -87,7 +87,7 @@ public class ClientServiceImpl implements ClientService {
                             clientUnique.setMessageSend(true);
                             log.info("Message sent for client: {}", clientUnique.getPhone());
                         }
-                        if (clientUniqueRepository.findByPhone(clientUnique.getPhone()) == null) {
+                        if (clientUniqueRepository.getById(clientUnique.getPhone()).getPhone() == null) {
                             clientUniqueRepository.save(clientUnique);
                         }
                         log.info("The client is saved: {}", clientUnique.getPhone());
