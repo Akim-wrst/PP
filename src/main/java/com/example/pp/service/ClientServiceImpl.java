@@ -56,7 +56,7 @@ public class ClientServiceImpl implements ClientService {
             }
 
             clientFeignClient.getAllClients()
-                    .stream()
+                    .parallelStream()
                     .filter(Objects::nonNull)
                     .filter(client -> client.getPhone().endsWith(getLastDigitOfNumber())
                             && client.getBirthday().getMonth() == currentMonth)
