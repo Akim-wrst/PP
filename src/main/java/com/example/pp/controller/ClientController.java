@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/pp/v2/")
+@RequestMapping("/api/v2/clients")
 @Tag(name = "Client Controller", description = "Operations related to clients")
 public class ClientController {
 
@@ -23,7 +23,7 @@ public class ClientController {
             @ApiResponse(responseCode = "200", description = "Successful operation"),
             @ApiResponse(responseCode = "500", description = "Error occurred while sending messages")
     })
-    @PostMapping("getClients")
+    @PostMapping("clients/sendUniqueMessages")
     public void findAllClients() {
         service.sendUniqueClientMessagesBasedOnTime();
     }
@@ -35,7 +35,7 @@ public class ClientController {
             @ApiResponse(responseCode = "404", description = "Client not found"),
             @ApiResponse(responseCode = "500", description = "Error occurred while processing client")
     })
-    @PostMapping("getClient/{id}")
+    @PostMapping("client/processAndSendUniqueMessage/{id}")
     public void getClientId(@Parameter(description = "ID of the client to be processed. Cannot be empty.", required = true) @PathVariable String id) {
         service.processClientAndSendUniqueMessageIfApplicable(id);
     }
