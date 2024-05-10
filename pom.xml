@@ -36,13 +36,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- @Value и @ConfigurationProperties для внедрения значений из свойств в наш код -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-
         <!-- Все для упрощения взаимодействия между микросервисами -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
