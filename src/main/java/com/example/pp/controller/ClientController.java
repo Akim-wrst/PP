@@ -1,8 +1,10 @@
 package com.example.pp.controller;
 
 import com.example.pp.service.ClientServiceImpl;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +14,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/clients")
+@OpenAPIDefinition(info = @Info(
+        title = "API Documentation",
+        version = "1.0.0",
+        description = "pre project"
+))
 @Tag(name = "Client Controller", description = "Operations related to clients")
 public class ClientController {
 
