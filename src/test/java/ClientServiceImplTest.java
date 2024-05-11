@@ -7,7 +7,6 @@ import com.example.pp.repository.ClientUniqueRepository;
 import com.example.pp.service.ClientServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -65,26 +64,26 @@ public class ClientServiceImplTest {
 
         verify(clientFeignClient, times(1)).getAllClients();
 
-        ArgumentCaptor<String> topicCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<Message> messageCaptor = ArgumentCaptor.forClass(Message.class);
-        verify(kafkaTemplate, times(2)).send(topicCaptor.capture(), messageCaptor.capture());
+        verify(clientUniqueMapper, times(2)).clientToMessage(any(), any());
 
-        ArgumentCaptor<String> phoneCaptor = ArgumentCaptor.forClass(String.class);
-        verify(clientUniqueRepository, times(2)).updateClientMessageSendTrue(phoneCaptor.capture());
+        verify(kafkaTemplate, times(2)).send(anyString(), any());
 
-        ArgumentCaptor<ClientUnique> clientCaptor = ArgumentCaptor.forClass(ClientUnique.class);
-        verify(clientUniqueRepository, times(2)).save(clientCaptor.capture());
+        verify(clientUniqueRepository, times(2)).findPhoneByPhone(anyString());
+
+        verify(clientUniqueRepository, times(2)).updateClientMessageSendTrue(anyString());
+
+        verify(clientUniqueRepository, times(2)).save(any());
     }
 
     @Test
     public void testProcessClientAndSendUniqueMessageIfApplicable() {
-        Client client = new Client("1", "Иван", "Иванов", "Иванович", 26L, LocalDate.now(), "89111234567");
+        Client client = new Client("1", "Иван", "Иванов", "Иванович", 26L, LocalDate.now(), "89111234561");
 
         when(clientFeignClient.getClient("1")).thenReturn(client);
 
         clientService.processClientAndSendUniqueMessageIfApplicable("1");
 
-        verify(clientFeignClient, times(1)).getClient("1");
+        verify(clientFeignClient, times(1)).getClient(any());
     }
 }
 
