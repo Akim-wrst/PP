@@ -12,8 +12,12 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.*;
-import java.util.*;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -82,9 +86,7 @@ public class ClientServiceImpl implements ClientService {
                             clientUnique.setMessageSend(true);
                             log.info("Message sent for client: {}", clientUnique.getPhone());
                         }
-                        if (clientUniqueRepository.findPhoneByPhone(clientUnique.getPhone()) == null) {
-                            clientUniqueRepository.save(clientUnique);
-                        }
+                        clientUniqueRepository.save(clientUnique);
                         log.info("The client is saved: {}", clientUnique.getPhone());
                     });
         } catch (Exception e) {

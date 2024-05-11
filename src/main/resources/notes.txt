@@ -25,3 +25,24 @@ databaseChangeLog:
         System.out.println(clientUniqueMapper.toUniqueClient(client));
         System.out.println(clientUniqueMapper.clientToMessage(clientUniqueMapper.toUniqueClient(client), appConfig.getDiscount()));
     }
+
+@Transactional
+    @Override
+    public void processClientAndSendUniqueMessageIfApplicable(String id) {
+        try {
+            Client client = clientFeignClient.getClient(id);
+            if (client != null && client.getPhone().endsWith(getLastDigitOfNumber())
+                    && client.getBirthday().getMonth() == currentMonth) {
+                ClientUnique clientUnique = clientUniqueMapper.toUniqueClient(client);
+                if (!currentTime.isAfter(getTime())) {
+                    kafkaTemplate.send(getTopic_name(), clientUniqueMapper.clientToMessage(clientUnique, getDiscount()));
+                    clientUnique.setMessageSend(true);
+                    log.info("Message sent for client: {}", clientUnique.getPhone());
+                }
+                clientUniqueRepository.save(clientUnique);
+                log.info("The client is saved: {}", clientUnique.getPhone());
+            }
+        } catch (Exception e) {
+            log.error("Error occurred in getClient method with id {}: {}", id, e.getMessage());
+        }
+    }
