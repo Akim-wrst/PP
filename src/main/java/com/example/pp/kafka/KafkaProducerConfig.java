@@ -1,8 +1,8 @@
 package com.example.pp.kafka;
 
 import com.example.pp.model.Message;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.config.TopicConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,6 @@ import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
-@Getter
 public class KafkaProducerConfig {
 
     @Value("${clients.partitions}")
@@ -35,15 +34,29 @@ public class KafkaProducerConfig {
     @Value("${clients.host}")
     private String host;
 
+    @Value("${clients.weeks}")
+    private int weeks;
+
+    @Value("${clients.days}")
+    private int days;
+
     @Bean
     public NewTopic exampleTopic() {
-        return TopicBuilder.name(getTopic_name()).partitions(getPartitions()).replicas(getReplicas()).build();
+        Map<String, String> topicConfig = new HashMap<>();
+        long retentionPeriodMs = calculateRetentionPeriodInMs(weeks, days); // Вычисляем время жизни сообщений в миллисекундах
+        topicConfig.put(TopicConfig.RETENTION_MS_CONFIG, String.valueOf(retentionPeriodMs));
+        return TopicBuilder.name(topic_name).partitions(partitions).replicas(replicas).configs(topicConfig).build();
+    }
+
+    private long calculateRetentionPeriodInMs(int weeks, int days) {
+        long retentionPeriodSeconds = (weeks * 7L + days) * 24 * 60 * 60;
+        return retentionPeriodSeconds * 1000; // Конвертируем в миллисекунды
     }
 
     @Bean
     public ProducerFactory<String, Message> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, getHost());
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProps);
