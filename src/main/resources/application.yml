@@ -11,6 +11,8 @@ clients:
   replicas: 1
   lastDigitOfNumber: "7"
   time: "19:00"
+  weeks: 1
+  days: 0
 
 spring:
   datasource:
